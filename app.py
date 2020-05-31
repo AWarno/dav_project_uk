@@ -16,7 +16,7 @@ from chartScripts.governmentSatisfaction import govSatisfaction
 from chartScripts.world_map_plot import world_map_plot
 from chartScripts.time_series import predict_series
 
-app2 = dash.Dash(suppress_callback_exceptions=True, external_stylesheets=[
+app = dash.Dash(suppress_callback_exceptions=True, external_stylesheets=[
     "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap-grid.min.css"])
 
 datadeaths = pd.read_csv('datasets/daths.csv', encoding="utf-8")
@@ -33,7 +33,7 @@ DATA = df1
 df1uk = df1[df1['location'] == 'United Kingdom']
 df1uk = df1uk.sort_values(by=['date'], ascending=False)
 
-app2.layout = html.Div([
+app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Div(
         dbc.Row(
@@ -105,7 +105,7 @@ app2.layout = html.Div([
 '''Calbacks'''
 
 
-@app2.callback(
+@app.callback(
     Output(component_id='base_stats', component_property='children'),
     [Input(component_id='countries_selector', component_property='value')],
 )
@@ -113,7 +113,7 @@ def update_output_div(value):
     return statistics_column(df, countries=value)
 
 
-@app2.callback(
+@app.callback(
     Output(component_id='page-content', component_property='children'),
     [Input('navbar0', 'n_clicks_timestamp'), Input('navbar1', 'n_clicks_timestamp'), Input('navbar2', 'n_clicks_timestamp')],
 )
@@ -142,7 +142,7 @@ dates = ["2020-02-29", "2020-03-07", "2020-03-15", "2020-03-22", "2020-03-29", "
          "2020-04-28", "2020-05-04", "2020-05-06", "2020-05-08", "2020-05-10"]
 
 
-@app2.callback(dash.dependencies.Output('map_graph', 'figure'),
+@app.callback(dash.dependencies.Output('map_graph', 'figure'),
               [Input('uk_map', 'n_clicks'),
                Input('eng_map', 'n_clicks'),
                dash.dependencies.Input('date_slider', 'value')])
@@ -160,14 +160,14 @@ def changeMap(btn1, btn2, value):
     return fig
 
 
-@app2.callback(dash.dependencies.Output('pie_graph', 'figure'),
+@app.callback(dash.dependencies.Output('pie_graph', 'figure'),
               [dash.dependencies.Input('date_slider2', 'value')])
 def pieChartUpdate(value):
     return pie_plot(dates[int(format(value))])
 
 
 
-@app2.callback(dash.dependencies.Output('concerns_and_satisfaction', 'figure'),
+@app.callback(dash.dependencies.Output('concerns_and_satisfaction', 'figure'),
               [dash.dependencies.Input('concerns_satisfaction', 'value')])
 def pieChartUpdate(value):
     if value == 'concerns':
@@ -175,7 +175,7 @@ def pieChartUpdate(value):
     else:
         return govSatisfaction()
 
-@app2.callback(
+@app.callback(
     dash.dependencies.Output('time_series_graph', 'figure'),
     [dash.dependencies.Input('predict', 'n_clicks')],
     [dash.dependencies.State('single-date-picker-range', 'date')])
@@ -183,7 +183,7 @@ def update_output(n_clicks, date):
     return predict_series(df1uk, date, SpecialDates)
 
 
-@app2.callback(
+@app.callback(
     dash.dependencies.Output('world_map_graph', 'figure'),
     [dash.dependencies.Input('show', 'n_clicks')],
     [dash.dependencies.State('column-dropdown', 'value')])
@@ -198,7 +198,7 @@ white_button_style = {'background-color': 'transparent'}
 red_button_style = {'background-color': '#76b4e3'}
 
 #
-@app2.callback(Output('navbar0', 'style'),
+@app.callback(Output('navbar0', 'style'),
               [Input('navbar0', 'n_clicks_timestamp'), Input('navbar1', 'n_clicks_timestamp'), Input('navbar2', 'n_clicks_timestamp')])
 def change_button_style(time1, time2, time3):
     if not time1 and not time2 and not time3:
@@ -218,7 +218,7 @@ def change_button_style(time1, time2, time3):
 
         return white_button_style
 #
-@app2.callback(Output('navbar1', 'style'),
+@app.callback(Output('navbar1', 'style'),
               [Input('navbar0', 'n_clicks_timestamp'), Input('navbar1', 'n_clicks_timestamp'), Input('navbar2', 'n_clicks_timestamp')])
 def change_button_style(time1, time2, time3):
     if not time1 and not time2 and not time3:
@@ -238,8 +238,8 @@ def change_button_style(time1, time2, time3):
 
         return white_button_style
 
-@app2.callback(Output('navbar2', 'style'),
-               [Input('navbar0', 'n_clicks_timestamp'), Input('navbar1', 'n_clicks_timestamp'),
+@app.callback(Output('navbar2', 'style'),
+              [Input('navbar0', 'n_clicks_timestamp'), Input('navbar1', 'n_clicks_timestamp'),
                 Input('navbar2', 'n_clicks_timestamp')])
 def change_button_style(time1, time2, time3):
     if not time1 and not time2 and not time3:
@@ -260,5 +260,5 @@ def change_button_style(time1, time2, time3):
         return white_button_style
 
 if __name__ == "__main__":
-    app2.run_server(host='127.0.0.1', port='8000', debug=True)
+    app.run_server(host='127.0.0.1', port='8000', debug=True)
 

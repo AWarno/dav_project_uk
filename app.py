@@ -19,6 +19,8 @@ from chartScripts.time_series import predict_series
 app = dash.Dash(suppress_callback_exceptions=True, external_stylesheets=[
     "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap-grid.min.css"])
 
+server = app.server
+
 datadeaths = pd.read_csv('datasets/daths.csv', encoding="utf-8")
 
 datadeaths.columns = ['week', 'nocov', 'all', 'cov']
@@ -259,6 +261,7 @@ def change_button_style(time1, time2, time3):
 
         return white_button_style
 
-if __name__ == "__main__":
-    app.run_server(host='127.0.0.1', port='8000', debug=True)
+if __name__ == '__main__':
+    app.run_server(debug=True)
+
 

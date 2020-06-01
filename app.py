@@ -1,6 +1,6 @@
 # Import required libraries
 import dash
-from datetime import date
+from datetime import datetime, timedelta, date
 
 from dash.dependencies import Input, Output
 import dash_core_components as dcc
@@ -17,7 +17,9 @@ from chartScripts.world_map_plot import world_map_plot
 from chartScripts.time_series import predict_series
 
 app = dash.Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[
-    "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap-grid.min.css"])
+    "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap-grid.min.css",
+    "https://codepen.io/chriddyp/pen/bWLwgP.css",
+     "https://codepen.io/chriddyp/pen/brPBPO.css"])
 
 server = app.server
 
